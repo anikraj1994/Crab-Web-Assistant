@@ -65,7 +65,8 @@ bot.dialog('/profile', [
 ]);
 bot.dialog('/time', [
     function (session) {
-        session.send('The time is '+new Date().getHours()+":"+new Date().getMinutes());        
+        session.send('The time is '+new Date().getHours()+":"+new Date().getMinutes()); 
+        session.endDialog();       
     }
 ]);
 

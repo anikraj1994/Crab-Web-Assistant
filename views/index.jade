@@ -11,15 +11,11 @@ html(lang='en')
       .nav
         h1.heading Crab
       ol#chat-window.chat-window
-        li.other
-          .msg
-            p Hello
-            p Ask me something!
       .result-holder
       #results.result
         span#final_span.final
         span#interim_span.interim
-      #fab.fab-container
+      #fab.fab-container(hidden='')
         button#start_button.fab(onclick='startButton(event)')
           img#fab-image(height='50', src='/images/mic.png', alt='mic')
   script(src='/javascripts/flip.js')
