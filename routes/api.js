@@ -19,6 +19,7 @@ bot.dialog('/', intents);
 
 intents.matches(/^change name/i, [
     function (session) {
+      console.log("match change name");      
         session.beginDialog('/profile');
     },
     function (session, results) {
@@ -28,11 +29,13 @@ intents.matches(/^change name/i, [
 
 intents.matches(/^what is the time/i, [
     function (session) {
+      console.log("match time1");
       session.beginDialog('/time');
     }
 ]);
 intents.matches(/^time/i, [
     function (session) {
+      console.log("match time2");
       session.beginDialog('/time');
     }
 ]);

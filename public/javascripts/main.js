@@ -6,8 +6,19 @@ var interim_span=document.getElementById("interim_span");
 
 
         if (!('webkitSpeechRecognition' in window)) {
-        upgrade();
+        addToList('<p>Speech Recognition not supported :(</p>',false);
         } else {
+
+        if(sessionStorage.conversationId){
+            getSocketLink().then(function(){
+                connectToSocket();
+            });
+        }
+        else{
+            register().then(function(){
+                connectToSocket();
+            });
+        }
         var recognition = new webkitSpeechRecognition();
         recognition.continuous = false;
         recognition.interimResults = true;
@@ -49,8 +60,9 @@ var interim_span=document.getElementById("interim_span");
             interim_span.innerHTML = linebreak(interim_transcript);
 
             if(final_transcript){
-                addToList('<p>'+final_transcript+'</p>',true);
-                callWit(final_transcript);
+                //addToList('<p>'+final_transcript+'</p>',true);
+               // callWit(final_transcript);
+                sendToBot(final_transcript);
             }
         };
         }
@@ -105,6 +117,18 @@ var interim_span=document.getElementById("interim_span");
             });
         }
 
+        function sendToBot(message){
+            ajax("/send?conversationId="+sessionStorage.conversationId+"&message="+message).then(function(result) {
+                if(result!=='ok'){
+                addToList("<p>Send failed. Resending.</p>");
+            }
+            }).catch(function() {
+                // An error occurred
+                console.log("error");
+                addToList("<p>Something went wrong. I couldnt contact my server</p>",false);
+            });
+        }
+
         function ajax(url) {
     return new Promise(function(resolve, reject) {
         var xhr = new XMLHttpRequest();
@@ -143,4 +167,75 @@ var interim_span=document.getElementById("interim_span");
        flip.removeClass("fab-container-right");
         
         }
+
+
+        function connectToSocket(){
+            if ("WebSocket" in window)
+            {
+               var ws = new WebSocket(sessionStorage.socketLink);
+				
+               ws.onopen = function()
+               {
+                   addToList("<p>Connected</p>",false);
+                   addToList("<p>Hello?</p>",false);
+                   document.getElementById("fab").hidden=false;
+                  // Web Socket is connected, send data using send()
+                //   ws.send("Message to send");
+                //   alert("Message is sent...");
+               };
+				
+               ws.onmessage = function (evt) 
+               { 
+                  var received_msg = JSON.parse(evt.data);
+                  if(received_msg.activities[0].from.id==='crab')
+                   addToList('<p>'+received_msg.activities[0].text+'</p>',false);
+                   else 
+                   addToList('<p>'+received_msg.activities[0].text+'</p>',true);
+               };
+				
+               ws.onclose = function()
+               { 
+                  // websocket is closed.
+                   addToList("<p>Disconnected</p>",false);
+               };
+            }
+            
+            else
+            {
+               // The browser doesn't support WebSocket
+               addToList("<p>WebSocket NOT supported by your Browser!</p>");
+            }
+        }
+
+
+        //register
+        function register(){
+             return new Promise(function(resolve, reject) {
+            ajax("/register").then(function(result) {
+                sessionStorage.conversationId=JSON.parse(result).conversationId;
+                sessionStorage.socketLink=JSON.parse(result).streamUrl;
+                resolve();
+            }).catch(function() {
+                // An error occurred
+            reject();
+                console.log("error");
+                addToList("<p>Something went wrong. I couldnt Register</p>",false);
+            });
+             });
+        }
+        //getSocketLink
+        function getSocketLink(){
+             return new Promise(function(resolve, reject) {
+            ajax("/getSocketLink?conversationId="+sessionStorage.conversationId).then(function(result) {
+                sessionStorage.socketLink=JSON.parse(result).streamUrl;
+                resolve();
+            }).catch(function() {
+                // An error occurred
+            reject();
+                console.log("error");
+                addToList("<p>Something went wrong. I couldnt Register</p>",false);
+            });
+             });
+        }
+
         
