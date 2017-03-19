@@ -92,7 +92,12 @@ intents.matches(/^book uber/i, [
         session.beginDialog('/uber');
     }
 ]);
-
+intents.matches(/^sign out uber/i, [
+    function(session) {
+        session.userData.uberAccessToken = null;
+        session.send('Uber logged out');
+    }
+]);
 
 intents.onDefault([
     function(session, args, next) {
