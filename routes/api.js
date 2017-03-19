@@ -139,7 +139,7 @@ bot.dialog('/uber', [
 
         // session.send("data not exist4");
 
-        session.send('Need to login to uber<br><a href="' + url + '">Sign in</a>');
+        session.send('Need to login to uber');
     }
 ]);
 
