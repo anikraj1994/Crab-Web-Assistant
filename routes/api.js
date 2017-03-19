@@ -41,14 +41,14 @@ router.get('/uberCallback', function(request, response) {
             console.log('... token is valid until: ' + tokenExpiration);
             console.log('... after token expiration, re-authorize using refresh_token: ' + refresh_token);
 
-            var result = [];
-            result.push(access_token);
-            result.push(authorizedScopes);
-            result.push(tokenExpiration);
-            result.push(refresh_token);
+            // var result = [];
+            // result.push(access_token);
+            // result.push(authorizedScopes);
+            // result.push(tokenExpiration);
+            // result.push(refresh_token);
 
             // redirect the user back to your actual app
-            bot.beginDialog("uberCallback", result);
+            bot.beginDialog("uberCallback", access_token);
         })
         .error(function(err) {
             console.error(err);
@@ -146,7 +146,7 @@ bot.dialog('/uber', [
 bot.dialog('uberCallback', [
     function(session, result) {
         session.send('Uber logged in');
-        console.log('access_token receiveddddd: ' + result[0]);
+        console.log('access_token receiveddddd: ' + result);
         session.endDialog();
     }
 ]);
