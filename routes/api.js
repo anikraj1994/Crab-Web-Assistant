@@ -48,9 +48,8 @@ router.get('/uberCallback', function(request, response) {
             // result.push(refresh_token);
 
             // redirect the user back to your actual app
-            // address = JSON.parse(request.query.state);
-
-            bot.beginDialog("uber callback", "/uberCallback", access_token);
+            var address = JSON.parse(request.query.state);
+            bot.beginDialog(address, "/uberCallback", access_token);
         })
         .error(function(err) {
             console.error(err);
@@ -141,7 +140,7 @@ bot.dialog('/uber', [
 
         // session.send("data not exist4");
 
-        session.send('Need to login to uber');
+        session.send('Need to login to uber ' + url + "&state=" + encodeURIComponent(JSON.stringify(session.message.address)));
     }
 ]);
 
