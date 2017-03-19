@@ -192,15 +192,20 @@ function connectToSocket() {
                 console.log(e + "");
             }
             if (received_msg.activities[0].from.id === 'crab') {
-                addToList('<p>' + received_msg.activities[0].text + '</p>', false);
                 // var tts = new GoogleTTS('en');
                 // tts.play(received_msg.activities[0].text);
-                responsiveVoice.speak(received_msg.activities[0].text, "UK English Male", {
-                    onend: function() {
-                        if (String(received_msg.activities[0].text).includes("?")) startButton(evt);
-                        else console.log("nq");
-                    }
-                });
+                if (!(received_msg.activities[0].text).includes("#")) {
+                    addToList('<p>' + received_msg.activities[0].text + '</p>', false);
+                    responsiveVoice.speak(received_msg.activities[0].text, "UK English Male", {
+                        onend: function() {
+                            if (String(received_msg.activities[0].text).includes("?")) startButton(evt);
+                            else console.log("nq");
+                        }
+                    });
+                } else {
+                    addToList('<a href="' + (received_msg.activities[0].text).split(" ")[2] + '" target="_blank">' + (received_msg.activities[0].text).split(" ")[1] + '</p>', false);
+                }
+
 
             } else
                 addToList('<p>' + received_msg.activities[0].text + '</p>', true);

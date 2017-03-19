@@ -50,7 +50,7 @@ router.get('/uberCallback', function(request, response) {
             // redirect the user back to your actual app
             var address = JSON.parse(request.query.state);
             bot.beginDialog(address, "/uberCallback", access_token);
-            router.redirect("/close");
+            response.redirect("https://crab.anikrajc.com/close");
         })
         .error(function(err) {
             console.error(err);
