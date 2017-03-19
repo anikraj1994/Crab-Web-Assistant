@@ -8,7 +8,7 @@ var uber = new Uber({
     client_id: 'exGa_FaLJ7vjpXBVS81wb1js-YOH6Odx',
     client_secret: 'gLnGeh3A7DGAO5-R6Gn9HyECWhT8299e3Km30VWG',
     server_token: 'dPDUMh8K09edXz1vWG-43oR-LWEHTOMyKZGm7wqW',
-    redirect_uri: '/api/uberCallback',
+    redirect_uri: 'https://crab.anikrajc.com/api/uberCallback',
     name: 'Crab Assistant',
     language: 'en_US', // optional, defaults to en_US
     sandbox: true // optional, defaults to false
