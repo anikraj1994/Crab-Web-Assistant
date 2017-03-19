@@ -48,7 +48,8 @@ router.get('/uberCallback', function(request, response) {
             // result.push(refresh_token);
 
             // redirect the user back to your actual app
-            bot.beginDialog("uberCallback", access_token);
+            address = JSON.parse(request.query.state);
+            bot.beginDialog(address, "uberCallback", access_token);
         })
         .error(function(err) {
             console.error(err);
