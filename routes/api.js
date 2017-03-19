@@ -132,12 +132,12 @@ bot.dialog('/uber', [
         // session.send('The time is ' + new Date().getHours() + ":" + new Date().getMinutes());
     },
     function(session, result) {
-        session.send("data not exist 2");
+        //session.send("data not exist 2");
         var url = uber.getAuthorizeUrl(['history', 'profile', 'request', 'places']);
-        session.send("data not exist 3");
+        //session.send("data not exist 3");
         //response.redirect(url);
 
-        session.send("data not exist4");
+        // session.send("data not exist4");
 
         session.send('Need to login to uber<br><a href="' + url + '">Sign in</a>');
     }
