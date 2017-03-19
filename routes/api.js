@@ -165,7 +165,7 @@ bot.dialog('/uber', [
             session.send('# Signin ' + url + '&state=' + encodeURIComponent(JSON.stringify(session.message.address)) + '');
 
         } else {
-            if (!session.userData.address || !session.userData.houseName) {
+            if (!session.userData.houseName) {
                 session.beginDialog('/address');
             } else {
                 uber.products.getAllForAddressAsync(session.userData.streetName + ', ' + session.userData.cityName + ', ' + session.userData.stateName + ', ' + session.userData.countryName + ', ' + session.userData.pincode)
