@@ -158,82 +158,83 @@ bot.dialog('/time', [
     }
 ]);
 bot.dialog('/uber', [
-            function(session) {
-                if (!session.userData.uberAccessToken) {
-                    // builder.Prompts.text(session, 'data not exist');
-                    var url = uber.getAuthorizeUrl(['history', 'profile', 'request', 'places']);
-                    session.send('# Signin ' + url + '&state=' + encodeURIComponent(JSON.stringify(session.message.address)) + '');
+    function(session) {
+        if (!session.userData.uberAccessToken) {
+            // builder.Prompts.text(session, 'data not exist');
+            var url = uber.getAuthorizeUrl(['history', 'profile', 'request', 'places']);
+            session.send('# Signin ' + url + '&state=' + encodeURIComponent(JSON.stringify(session.message.address)) + '');
 
-                } else {
-                    if (!session.userData.houseName) {
-                        session.beginDialog('/address');
-                    } else {
-                        // uber.products.getAllForAddressAsync(session.userData.streetName + ', ' + session.userData.cityName + ', ' + session.userData.stateName + ', ' + session.userData.countryName + ', ' + session.userData.pincode)
-                        uber.products.getAllForAddressAsync("1455 Market St, San Francisco, CA 94103, US")
-                            .then(function(res) {
-                                    // console.log(res.products[1]);
-                                    session.send("#^Following cabs available");
-                                    res.products.forEach(function(product) {
-                                            session.send("#^" + product.display_name + "<br>" + product.description + "<br>Capacity : " + product.capacity);
-                                        }
-                                    })
-                                .error(function(err) {
-                                    console.error(err);
-                                    session.send("something went wrong. try again.");
-                                }); session.endDialog();
-                            }
-                    }
-                    // session.send('The time is ' + new Date().getHours() + ":" + new Date().getMinutes());
-                }
-            ]);
-
-        bot.dialog('/uberCallback', [
-            function(session, result) {
-                session.send('Uber logged in. Now try booking uber');
-                session.userData.uberAccessToken = result;
+        } else {
+            if (!session.userData.houseName) {
+                session.beginDialog('/address');
+            } else {
+                // uber.products.getAllForAddressAsync(session.userData.streetName + ', ' + session.userData.cityName + ', ' + session.userData.stateName + ', ' + session.userData.countryName + ', ' + session.userData.pincode)
+                uber.products.getAllForAddressAsync("1455 Market St, San Francisco, CA 94103, US")
+                    .then(function(res) {
+                        // console.log(res.products[1]);
+                        session.send("#^Following cabs available");
+                        res.products.forEach(function(product) {
+                            session.send("#^" + product.display_name + "<br>" + product.description + "<br>Capacity : " + product.capacity);
+                        });
+                    })
+                    .error(function(err) {
+                        console.error(err);
+                        session.send("something went wrong. try again.");
+                    });
                 session.endDialog();
             }
-        ]);
+        }
+        // session.send('The time is ' + new Date().getHours() + ":" + new Date().getMinutes());
+    }
+]);
+
+bot.dialog('/uberCallback', [
+    function(session, result) {
+        session.send('Uber logged in. Now try booking uber');
+        session.userData.uberAccessToken = result;
+        session.endDialog();
+    }
+]);
 
 
 
-        // const accessToken = "MRQQXGF3QUFBV5BI4BTC7RDKPIO2NYWG";
+// const accessToken = "MRQQXGF3QUFBV5BI4BTC7RDKPIO2NYWG";
 
-        // const actions = {
-        //   send(request, response) {
-        //       return new Promise(function(resolve, reject) {
-        //         console.log(JSON.stringify(response));
-        //         return resolve();
-        //       });
-        //     },
-        //     getTime({context, entities}) {
-        //     return new Promise(function(resolve, reject) {
-        //       // Here should go the api call, e.g.:
-        //       // context.forecast = apiCall(context.loc)
-        //       context.time = new Date().toDateString();
-        //       return resolve(context);
-        //     });
-        //   }
+// const actions = {
+//   send(request, response) {
+//       return new Promise(function(resolve, reject) {
+//         console.log(JSON.stringify(response));
+//         return resolve();
+//       });
+//     },
+//     getTime({context, entities}) {
+//     return new Promise(function(resolve, reject) {
+//       // Here should go the api call, e.g.:
+//       // context.forecast = apiCall(context.loc)
+//       context.time = new Date().toDateString();
+//       return resolve(context);
+//     });
+//   }
 
-        // };
+// };
 
-        // const client = new Wit({accessToken, actions});
+// const client = new Wit({accessToken, actions});
 
-        /* GET home page. */
-        // router.get('/', function(req, res, next) {
-        //   if(req.query.message){
-        //     client.message(req.query.message, {})
-        //     .then((data) => {
-        //       console.log('Yay, got response: ' + JSON.stringify(data));
-        //       res.send("got response");
-        //     })
-        //     .catch((error) => {
-        //       console.log('NOOOO, error response: ' + JSON.stringify(error));
-        //        res.send("Error, Try again"); 
-        //     });
-        //   }
-        //   else res.send("What?");
-        // });
+/* GET home page. */
+// router.get('/', function(req, res, next) {
+//   if(req.query.message){
+//     client.message(req.query.message, {})
+//     .then((data) => {
+//       console.log('Yay, got response: ' + JSON.stringify(data));
+//       res.send("got response");
+//     })
+//     .catch((error) => {
+//       console.log('NOOOO, error response: ' + JSON.stringify(error));
+//        res.send("Error, Try again"); 
+//     });
+//   }
+//   else res.send("What?");
+// });
 
 
-        module.exports = router;
+module.exports = router;
