@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
     res.render('index', { title: 'Express' });
 });
 router.get('/close', function(req, res, next) {
-    res.render('index', { title: 'Oauth success. Close this window.' });
+    res.render('close', { message: 'Oauth success. Close this window.' });
 });
 
 router.get('/register', function(req, res, next) {
