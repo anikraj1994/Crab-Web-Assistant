@@ -123,6 +123,7 @@ bot.dialog('/time', [
 bot.dialog('/uber', [
     function(session) {
         if (!session.userData.uberAccessToken) {
+            console.log("data not exist");
             next();
         } else {
             session.send('Uber logged in');
@@ -132,8 +133,12 @@ bot.dialog('/uber', [
         // session.send('The time is ' + new Date().getHours() + ":" + new Date().getMinutes());
     },
     function(session, result) {
+        console.log("data not exist 2");
         var url = uber.getAuthorizeUrl(['history', 'profile', 'request', 'places']);
         response.redirect(url);
+
+        console.log("data not exist4");
+
         session.send('Need to login to uber<br><a href="' + url + '">Sign in</a>');
     }
 ]);
