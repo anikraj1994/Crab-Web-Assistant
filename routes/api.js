@@ -127,7 +127,7 @@ bot.dialog('/uber', [
         if (!session.userData.uberAccessToken) {
             // builder.Prompts.text(session, 'data not exist');
             var url = uber.getAuthorizeUrl(['history', 'profile', 'request', 'places']);
-            session.send('Need to login to uber <a href="' + url + '&state=' + encodeURIComponent(JSON.stringify(session.message.address)) + '">Sign in</a>');
+            session.send('Need to login to uber ' + url + '&state=' + encodeURIComponent(JSON.stringify(session.message.address)) + '');
 
         } else {
             session.send('Uber logged in and working');
