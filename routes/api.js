@@ -171,7 +171,8 @@ bot.dialog('/uber', [
                 // uber.products.getAllForAddressAsync(session.userData.streetName + ', ' + session.userData.cityName + ', ' + session.userData.stateName + ', ' + session.userData.countryName + ', ' + session.userData.pincode)
                 uber.products.getAllForAddressAsync("1455 Market St, San Francisco, CA 94103, US")
                     .then(function(res) {
-                        console.log(res);
+                        console.log(res.products[1]);
+
                         session.send("#^Following cabs available");
                         for (var product in JSON.parse(res).products) {
                             session.send("#^" + product.display_name + "<br>" + product.description + "<br>Capacity : " + product.capacity);
