@@ -173,7 +173,7 @@ bot.dialog('/uber', [
                     .then(function(res) {
                         console.log(res);
                         session.send("#^Following cabs available");
-                        for (product in res.products) {
+                        for (var product in res.products) {
                             session.send("#^" + product.display_name + "<br>" + product.description + "<br>Capacity : " + product.capacity);
                         }
                     })
