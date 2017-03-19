@@ -41,13 +41,14 @@ router.get('/uberCallback', function(request, response) {
             console.log('... token is valid until: ' + tokenExpiration);
             console.log('... after token expiration, re-authorize using refresh_token: ' + refresh_token);
 
-            Msession.userData.uberAccessToken = access_token;
-            Msession.userData.uberAuthorizedScopes = authorizedScopes;
-            Msession.userData.uberTokenExpiration = tokenExpiration;
-            Msession.userData.uberRefresh_token = refresh_token;
+            var result = [];
+            result.push(access_token);
+            result.push(authorizedScopes);
+            result.push(tokenExpiration);
+            result.push(refresh_token);
 
             // redirect the user back to your actual app
-            response.redirect('/');
+            bot.beginDialog("uberCallback", result);
         })
         .error(function(err) {
             console.error(err);
@@ -122,15 +123,26 @@ bot.dialog('/time', [
 bot.dialog('/uber', [
     function(session) {
         if (!session.userData.uberAccessToken) {
-            Msession = session;
-            session.send('Need to login to uber');
-            router.redirect("/uberLogin");
+            next();
         } else {
             session.send('Uber logged in');
             console.log('access_token exist: ' + session.userData.uberAccessToken);
             session.endDialog();
         }
         // session.send('The time is ' + new Date().getHours() + ":" + new Date().getMinutes());
+    },
+    function(session, result) {
+        var url = uber.getAuthorizeUrl(['history', 'profile', 'request', 'places']);
+        response.redirect(url);
+        session.send('Need to login to uber<br><a href="' + url + '">Sign in</a>');
+    }
+]);
+
+bot.dialog('uberCallback', [
+    function(session, result) {
+        session.send('Uber logged in');
+        console.log('access_token receiveddddd: ' + result[0]);
+        session.endDialog();
     }
 ]);
 
