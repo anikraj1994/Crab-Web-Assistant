@@ -134,7 +134,8 @@ bot.dialog('/uber', [
     function(session, result) {
         session.send("data not exist 2");
         var url = uber.getAuthorizeUrl(['history', 'profile', 'request', 'places']);
-        response.redirect(url);
+        session.send("data not exist 3");
+        //response.redirect(url);
 
         session.send("data not exist4");
 
