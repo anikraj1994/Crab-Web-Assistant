@@ -168,7 +168,8 @@ bot.dialog('/uber', [
             if (!session.userData.houseName) {
                 session.beginDialog('/address');
             } else {
-                uber.products.getAllForAddressAsync(session.userData.streetName + ', ' + session.userData.cityName + ', ' + session.userData.stateName + ', ' + session.userData.countryName + ', ' + session.userData.pincode)
+                // uber.products.getAllForAddressAsync(session.userData.streetName + ', ' + session.userData.cityName + ', ' + session.userData.stateName + ', ' + session.userData.countryName + ', ' + session.userData.pincode)
+                uber.products.getAllForAddressAsync("1455 Market St, San Francisco, CA 94103, US")
                     .then(function(res) { console.log(res); })
                     .error(function(err) { console.error(err); });
                 session.endDialog();
