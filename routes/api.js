@@ -123,8 +123,7 @@ bot.dialog('/time', [
 bot.dialog('/uber', [
     function(session) {
         if (!session.userData.uberAccessToken) {
-            session.send("data not exist");
-            next();
+            builder.Prompts.text(session, 'data not exist');
         } else {
             session.send('Uber logged in');
             console.log('access_token exist: ' + session.userData.uberAccessToken);
