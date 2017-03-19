@@ -127,27 +127,27 @@ bot.dialog('/address', [
     },
 
     function(session, results) {
-        session.userData.address.houseName = results.response;
+        session.userData.houseName = results.response;
         builder.Prompts.text(session, 'What is your Street Name?');
     },
     function(session, results) {
-        session.userData.address.streetName = results.response;
+        session.userData.streetName = results.response;
         builder.Prompts.text(session, 'What is your City Name?');
     },
     function(session, results) {
-        session.userData.address.cityName = results.response;
+        session.userData.cityName = results.response;
         builder.Prompts.text(session, 'What is your State Name?');
     },
     function(session, results) {
-        session.userData.address.stateName = results.response;
+        session.userData.stateName = results.response;
         builder.Prompts.text(session, 'What is your Country Name?');
     },
     function(session, results) {
-        session.userData.address.countryName = results.response;
+        session.userData.countryName = results.response;
         builder.Prompts.text(session, 'What is your Pincode?');
     },
     function(session, results) {
-        session.userData.address.pincode = results.response;
+        session.userData.pincode = results.response;
         session.endDialog();
     }
 ]);
@@ -165,10 +165,10 @@ bot.dialog('/uber', [
             session.send('# Signin ' + url + '&state=' + encodeURIComponent(JSON.stringify(session.message.address)) + '');
 
         } else {
-            if (!session.userData.address || !session.userData.address.houseName) {
+            if (!session.userData.address || !session.userData.houseName) {
                 session.beginDialog('/address');
             } else {
-                uber.products.getAllForAddressAsync(session.userData.address.streetName + ', ' + session.userData.address.cityName + ', ' + session.userData.address.stateName + ', ' + session.userData.address.countryName + ', ' + session.userData.address.pincode)
+                uber.products.getAllForAddressAsync(session.userData.streetName + ', ' + session.userData.cityName + ', ' + session.userData.stateName + ', ' + session.userData.countryName + ', ' + session.userData.pincode)
                     .then(function(res) { console.log(res); })
                     .error(function(err) { console.error(err); });
                 session.endDialog();
