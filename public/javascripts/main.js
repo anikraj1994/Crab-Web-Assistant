@@ -203,7 +203,11 @@ function connectToSocket() {
                         }
                     });
                 } else {
-                    addToList('<a href="' + (received_msg.activities[0].text).split(" ")[2] + '" target="_blank">' + (received_msg.activities[0].text).split(" ")[1] + '</p>', false);
+                    if ((received_msg.activities[0].text).includes("^")) {
+                        addToList('<p>' + (received_msg.activities[0].text).substring(2) + '</p>', false);
+                    } else {
+                        addToList('<a href="' + (received_msg.activities[0].text).split(" ")[2] + '" target="_blank">' + (received_msg.activities[0].text).split(" ")[1] + '</p>', false);
+                    }
                 }
 
 
