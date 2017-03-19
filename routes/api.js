@@ -172,7 +172,7 @@ bot.dialog('/uber', [
                 uber.products.getAllForAddressAsync("1455 Market St, San Francisco, CA 94103, US")
                     .then(function(res) {
                         // console.log(res.products[1]);
-                        session.send("#^Following cabs available");
+                        session.send("Following cabs available");
                         res.products.forEach(function(product) {
                             session.send("#^" + product.display_name + "<br>" + product.description + "<br>Capacity : " + product.capacity);
                         });
