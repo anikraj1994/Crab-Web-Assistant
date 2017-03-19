@@ -121,6 +121,36 @@ bot.dialog('/profile', [
         session.endDialog();
     }
 ]);
+bot.dialog('/address', [
+    function(session) {
+        builder.Prompts.text(session, 'Address is needed to book. What is your House Name?');
+    },
+
+    function(session, results) {
+        session.userData.address.houseName = results.response;
+        builder.Prompts.text(session, 'What is your Street Name?');
+    },
+    function(session, results) {
+        session.userData.address.streetName = results.response;
+        builder.Prompts.text(session, 'What is your City Name?');
+    },
+    function(session, results) {
+        session.userData.address.cityName = results.response;
+        builder.Prompts.text(session, 'What is your State Name?');
+    },
+    function(session, results) {
+        session.userData.address.stateName = results.response;
+        builder.Prompts.text(session, 'What is your Country Name?');
+    },
+    function(session, results) {
+        session.userData.address.countryName = results.response;
+        builder.Prompts.text(session, 'What is your Pincode?');
+    },
+    function(session, results) {
+        session.userData.address.pincode = results.response;
+        session.endDialog();
+    }
+]);
 bot.dialog('/time', [
     function(session) {
         session.send('The time is ' + new Date().getHours() + ":" + new Date().getMinutes());
@@ -135,8 +165,14 @@ bot.dialog('/uber', [
             session.send('# Signin ' + url + '&state=' + encodeURIComponent(JSON.stringify(session.message.address)) + '');
 
         } else {
-            session.send('Uber logged in and working');
-            session.endDialog();
+            if (!session.userData.address.houseName) {
+                session.beginDialog('/address');
+            } else {
+                uber.products.getAllForAddressAsync(session.userData.address.streetName + ', ' + session.userData.address.cityName + ', ' + session.userData.address.stateName + ', ' + session.userData.address.countryName + ', ' + session.userData.address.pincode)
+                    .then(function(res) { console.log(res); })
+                    .error(function(err) { console.error(err); });
+                session.endDialog();
+            }
         }
         // session.send('The time is ' + new Date().getHours() + ":" + new Date().getMinutes());
     }
