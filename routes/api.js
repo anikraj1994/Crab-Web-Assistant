@@ -50,6 +50,7 @@ router.get('/uberCallback', function(request, response) {
             // redirect the user back to your actual app
             var address = JSON.parse(request.query.state);
             bot.beginDialog(address, "/uberCallback", access_token);
+            router.redirect("/close");
         })
         .error(function(err) {
             console.error(err);
@@ -124,30 +125,22 @@ bot.dialog('/time', [
 bot.dialog('/uber', [
     function(session) {
         if (!session.userData.uberAccessToken) {
-            builder.Prompts.text(session, 'data not exist');
+            // builder.Prompts.text(session, 'data not exist');
+            var url = uber.getAuthorizeUrl(['history', 'profile', 'request', 'places']);
+            session.send('Need to login to uber <a href="' + url + '&state=' + encodeURIComponent(JSON.stringify(session.message.address)) + '">Sign in</a>');
+
         } else {
-            session.send('Uber logged in');
-            console.log('access_token exist: ' + session.userData.uberAccessToken);
+            session.send('Uber logged in and working');
             session.endDialog();
         }
         // session.send('The time is ' + new Date().getHours() + ":" + new Date().getMinutes());
-    },
-    function(session, result) {
-        //session.send("data not exist 2");
-        var url = uber.getAuthorizeUrl(['history', 'profile', 'request', 'places']);
-        //session.send("data not exist 3");
-        //response.redirect(url);
-
-        // session.send("data not exist4");
-
-        session.send('Need to login to uber ' + url + "&state=" + encodeURIComponent(JSON.stringify(session.message.address)));
     }
 ]);
 
 bot.dialog('/uberCallback', [
     function(session, result) {
-        session.send('Uber logged in');
-        console.log('access_token receiveddddd: ' + result);
+        session.send('Uber logged in. Now try booking uber');
+        session.userData.uberAccessToken = result;
         session.endDialog();
     }
 ]);
