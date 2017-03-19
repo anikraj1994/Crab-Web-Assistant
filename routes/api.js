@@ -121,14 +121,16 @@ bot.dialog('/time', [
 ]);
 bot.dialog('/uber', [
     function(session) {
-        Msession = session;
         if (!session.userData.uberAccessToken) {
+            Msession = session;
+            session.send('Need to login to uber');
             router.redirect("/uberLogin");
         } else {
+            session.send('Uber logged in');
             console.log('access_token exist: ' + session.userData.uberAccessToken);
+            session.endDialog();
         }
         // session.send('The time is ' + new Date().getHours() + ":" + new Date().getMinutes());
-        session.endDialog();
     }
 ]);
 
