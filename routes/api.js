@@ -99,7 +99,7 @@ intents.matches(/^tell me a joke/i, [
 
         request('http://api.icndb.com/jokes/random?firstName=Glen&lastName=Thomas', function(error, response, body) {
             if (!error && response.statusCode == 200) {
-                session.send(body.value.joke);
+                session.send(JSON.parse(body).value.joke);
             }
         })
     }
