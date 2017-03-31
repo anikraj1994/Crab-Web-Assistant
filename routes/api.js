@@ -24,7 +24,10 @@ var connector = new builder.ChatConnector({
     appPassword: "JuCTL4CVh8ZpnAKvnk1XF9K"
 });
 var bot = new builder.UniversalBot(connector);
-var intents = new builder.IntentDialog();
+// var intents = new builder.IntentDialog();
+
+var recognizer = new builder.LuisRecognizer('https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/56202e3c-f185-4f41-980f-1188432c9c48?subscription-key=qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq&staging=true&verbose=true&timezoneOffset=0.0&q=');
+var intents = new builder.IntentDialog({ recognizers: [recognizer] });
 
 router.post('/bot', connector.listen());
 
@@ -95,6 +98,17 @@ intents.matches(/^book uber/i, [
 ]);
 
 intents.matches(/^tell me a joke/i, [
+    function(session) {
+        var names = ["Glen Thomas", "Akshay Babu", "Joel Hanson", "Jeril Johnson", "Joselin Johnson", "Christo Jacob", "Benoy Jason", "Jerin Francis", "Anto Jose", "Dinil Davis", "Anik Raj", "Joshwa George", "Kiran MR"]
+        var name = names[Math.floor(Math.random() * names.length)];
+        request('http://api.icndb.com/jokes/random?firstName=' + name.split(" ")[0] + '&lastName=' + name.split(" ")[1], function(error, response, body) {
+            if (!error && response.statusCode == 200) {
+                session.send(JSON.parse(body).value.joke);
+            }
+        })
+    }
+]);
+intents.matches('TellJoke', [
     function(session) {
         var names = ["Glen Thomas", "Akshay Babu", "Joel Hanson", "Jeril Johnson", "Joselin Johnson", "Christo Jacob", "Benoy Jason", "Jerin Francis", "Anto Jose", "Dinil Davis", "Anik Raj", "Joshwa George", "Kiran MR"]
         var name = names[Math.floor(Math.random() * names.length)];
