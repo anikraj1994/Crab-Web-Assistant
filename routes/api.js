@@ -96,8 +96,9 @@ intents.matches(/^book uber/i, [
 
 intents.matches(/^tell me a joke/i, [
     function(session) {
-
-        request('http://api.icndb.com/jokes/random?firstName=Glen&lastName=Thomas', function(error, response, body) {
+        var names = ["Glen Thomas", "Akshay Babu", "Joel Hanson", "Jeril Johnson", "Joselin Johnson", "Christo Jacob", "Benoy Jason", "Jerin Francis", "Anto Jose", "Dinil Davis", "Anik Raj", "Joshwa George", "Kiran MR"]
+        var name = names[Math.floor(Math.random() * names.length)];
+        request('http://api.icndb.com/jokes/random?firstName=' + name.split(" ")[0] + '&lastName=' + name.split(" ")[1], function(error, response, body) {
             if (!error && response.statusCode == 200) {
                 session.send(JSON.parse(body).value.joke);
             }
