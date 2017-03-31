@@ -26,7 +26,7 @@ var connector = new builder.ChatConnector({
 var bot = new builder.UniversalBot(connector);
 // var intents = new builder.IntentDialog();
 
-var recognizer = new builder.LuisRecognizer('https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/56202e3c-f185-4f41-980f-1188432c9c48?subscription-key=qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq&staging=true&verbose=true&timezoneOffset=0.0&q=');
+var recognizer = new builder.LuisRecognizer('https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/56202e3c-f185-4f41-980f-1188432c9c48?subscription-key=ef7668a0e4524c8e8116c8cafd33b1bd&staging=true&verbose=true&timezoneOffset=0.0&q=');
 var intents = new builder.IntentDialog({ recognizers: [recognizer] });
 
 router.post('/bot', connector.listen());
