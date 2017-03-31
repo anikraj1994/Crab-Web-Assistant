@@ -72,8 +72,23 @@ intents.matches(/^change name/i, [
         session.send('Ok... Changed your name to %s', session.userData.name);
     }
 ]);
+intents.matches('ChangeName', [
+    function(session) {
+        console.log("match change name");
+        session.beginDialog('/profile');
+    },
+    function(session, results) {
+        session.send('Ok... Changed your name to %s', session.userData.name);
+    }
+]);
 
 intents.matches(/^what is the time/i, [
+    function(session) {
+        console.log("match time1");
+        session.beginDialog('/time');
+    }
+]);
+intents.matches('Time', [
     function(session) {
         console.log("match time1");
         session.beginDialog('/time');
@@ -92,6 +107,11 @@ intents.matches(/^book cab/i, [
     }
 ]);
 intents.matches(/^book uber/i, [
+    function(session) {
+        session.beginDialog('/uber');
+    }
+]);
+intents.matches('BookUber', [
     function(session) {
         session.beginDialog('/uber');
     }
