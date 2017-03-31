@@ -4,6 +4,7 @@ let Wit = null;
 var express = require('express');
 var router = express.Router();
 var Uber = require('node-uber');
+var request = require('request');
 var uber = new Uber({
     client_id: 'exGa_FaLJ7vjpXBVS81wb1js-YOH6Odx',
     client_secret: 'gLnGeh3A7DGAO5-R6Gn9HyECWhT8299e3Km30VWG',
@@ -92,6 +93,19 @@ intents.matches(/^book uber/i, [
         session.beginDialog('/uber');
     }
 ]);
+
+intents.matches(/^tell me a joke/i, [
+    function(session) {
+
+        request('http://api.icndb.com/jokes/random?firstName=Glen&lastName=Thomas', function(error, response, body) {
+            if (!error && response.statusCode == 200) {
+                session.send(body.value.joke);
+            }
+        })
+    }
+]);
+
+
 intents.matches(/^sign out of uber/i, [
     function(session) {
         session.userData.uberAccessToken = null;
