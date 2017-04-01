@@ -85,7 +85,7 @@ intents.matches('ChangeName', [
 
 intents.matches('LocationSearch', [
     function(session) {
-        console.log("len " + session.message);
+        console.log("len " + session.message.text);
         request('https://maps.googleapis.com/maps/api/place/textsearch/json?key=AIzaSyA08sPZr_DoNjC4JzV8vCj3csG0HZ3zUUM&query=Coofee' + args.query, function(error, response, body) {
             if (!error && response.statusCode == 200) {
                 console.log(body)
