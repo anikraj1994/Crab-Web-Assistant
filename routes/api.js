@@ -89,8 +89,8 @@ intents.matches('LocationSearch', [
             if (!error && response.statusCode == 200) {
                 console.log(body)
                 console.log("ASdsadsa")
-                console.log(body.results)
-                var result = body.results;
+                console.log(JSON.parse(body).results)
+                var result = JSON.parse(body).results;
 
                 for (var i = 0; i < result.length; i++) {
                     var loc = result[i];
