@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Crab module maker</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background: #eee;
+            width: 100%;
+            height: 100%;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        .question-card,
+        .image-card {
+            margin-top: 16px;
+            max-width: 480px;
+            width: 100%;
+            margin-right: 5px;
+            margin-left: 5px;
+            background: white;
+            padding: 16px;
+            border-radius: 5px;
+            z-index: 1;
+        }
+        
+        .toolbar {
+            background: #c0392b;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 2;
+        }
+        
+        .toolbar-title {
+            padding: 22px;
+            color: white;
+            font-size: 20px;
+            font-weight: 100;
+            display: inline-block;
+        }
+        
+        .toolbar .button {
+            padding: 22px;
+            float: right;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .editor {
+            width: 100%;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .red {
+            color: #c0392b;
+        }
+        
+        .footer {
+            position: fixed;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            bottom: 5px;
+            z-index: 0;
+            display: inline-block;
+        }
+        
+        .footer div,
+        a {
+            display: inline-block;
+            text-decoration: none;
+        }
+        
+        .footer a:link {
+            color: #c0392b;
+        }
+        
+        .footer a:visited {
+            color: #c0392b;
+        }
+        
+        .footer a:hover {
+            font-size: 20px;
+        }
+        
+        .header {
+            float: left;
+        }
+        
+        .loaderparent {
+            justify-content: center;
+            align-items: center;
+            height: 50%;
+            display: none;
+        }
+        
+        .modal-content input[type=text] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: 2px solid red;
+            border-radius: 4px;
+        }
+        
+        .transition,
+        .question label,
+        .question input[type="text"],
+        textarea {
+            -moz-transition: all 0.25s cubic-bezier(0.53, 0.01, 0.35, 1.5);
+            -o-transition: all 0.25s cubic-bezier(0.53, 0.01, 0.35, 1.5);
+            -webkit-transition: all 0.25s cubic-bezier(0.53, 0.01, 0.35, 1.5);
+            transition: all 0.25s cubic-bezier(0.53, 0.01, 0.35, 1.5);
+        }
+        
+        .question textarea {
+            width: 100%;
+            resize: none;
+            height: 100px;
+            border-radius: 5px;
+            /*appearance: none;*/
+            /*background-color: none;*/
+            border: 1px solid #c0392b;
+            font-size: 17px;
+            display: block;
+            box-sizing: border-box;
+            padding: 10px 15px;
+            color: #c0392b;
+            font-weight: 100;
+            letter-spacing: 0.01em;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .question {
+            position: relative;
+            padding: 10px 0;
+        }
+        
+        .question:first-of-type {
+            padding-top: 0;
+        }
+        
+        .question:last-of-type {
+            padding-bottom: 0;
+        }
+        
+        .question label {
+            transform-origin: left center;
+            color: #c0392b;
+            font-weight: 100;
+            letter-spacing: 0.01em;
+            font-size: 17px;
+            box-sizing: border-box;
+            padding: 10px 15px;
+            display: block;
+            position: absolute;
+            margin-top: -40px;
+            z-index: 2;
+            pointer-events: none;
+        }
+        
+        .question input[type="text"] {
+            appearance: none;
+            background-color: none;
+            border: 1px solid #c0392b;
+            line-height: 0;
+            font-size: 17px;
+            width: 100%;
+            display: block;
+            box-sizing: border-box;
+            padding: 10px 15px;
+            border-radius: 5px;
+            color: #c0392b;
+            font-weight: 100;
+            letter-spacing: 0.01em;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .question input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            background: #c0392b;
+            color: white;
+            margin-top: 30px;
+        }
+        
+        .question input[type="text"]:valid,
+        textarea:valid {
+            margin-top: 30px;
+        }
+        
+        .question input[type="text"]:focus~label {
+            -moz-transform: translate(0, -35px);
+            -ms-transform: translate(0, -35px);
+            -webkit-transform: translate(0, -35px);
+            transform: translate(0, -35px);
+        }
+        
+        .question textarea:focus~label {
+            -moz-transform: translate(0, -100px);
+            -ms-transform: translate(0, -100px);
+            -webkit-transform: translate(0, -100px);
+            transform: translate(0, -100px);
+        }
+        
+        .question input[type="text"]:valid~label {
+            text-transform: uppercase;
+            font-style: italic;
+            -moz-transform: translate(5px, -35px) scale(0.6);
+            -ms-transform: translate(5px, -35px) scale(0.6);
+            -webkit-transform: translate(5px, -35px) scale(0.6);
+            transform: translate(5px, -35px) scale(0.6);
+        }
+        
+        .question textarea:valid~label {
+            text-transform: uppercase;
+            font-style: italic;
+            -moz-transform: translate(5px, -100px) scale(0.6);
+            -ms-transform: translate(5px, -100px) scale(0.6);
+            -webkit-transform: translate(5px, -100px) scale(0.6);
+            transform: translate(5px, -100px) scale(0.6);
+        }
+        
+        .fab {
+            background: #c0392b;
+            color: white;
+            height: 60px;
+            width: 60px;
+            position: fixed;
+            right: 86px;
+            border-radius: 50%;
+            bottom: 16px;
+            line-height: 60px;
+            text-align: center;
+            font-size: 2.4em;
+            font-weight: 100;
+            box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            z-index: 9;
+        }
+        
+        .fab.done {
+            right: 16px;
+        }
+        
+        .fab-dialog-background {
+            position: fixed;
+            height: 100%;
+            width: 100%;
+            z-index: 3;
+            background: #000000;
+            opacity: 0.7;
+            display: flex;
+            justify-content: center;
+            align-content: center;
+        }
+        
+        .fab-dialog-background.hidden {
+            display: none;
+        }
+        
+        .dialog-container,
+        .loading-dialog-container {
+            display: flex;
+            justify-content: center;
+            align-content: center;
+        }
+        
+        .dialog-container.hidden {
+            display: none;
+        }
+        
+        .loading-dialog-container.hidden {
+            display: none;
+        }
+        
+        .dialog {
+            position: fixed;
+            top: 35%;
+            padding: 16px;
+            margin: 5px;
+            background: white;
+            border-radius: 5px;
+            max-width: 480px;
+            z-index: 3;
+            opacity: 1;
+        }
+        
+        .dialog h2 {
+            font-weight: 100;
+        }
+        
+        .dialog .button {
+            color: white;
+            background: #c0392b;
+            display: block;
+            margin-bottom: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            padding: 16px;
+        }
+        
+        .loader {
+            position: relative;
+            margin: 0 auto;
+            width: 100px;
+        }
+        
+        .loader:before {
+            content: '';
+            display: block;
+            padding-top: 100%;
+        }
+        
+        .circular {
+            -webkit-animation: rotate 2s linear infinite;
+            animation: rotate 2s linear infinite;
+            height: 60px;
+            -webkit-transform-origin: center center;
+            transform-origin: center center;
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        .path {
+            stroke-dasharray: 1, 200;
+            stroke-dashoffset: 0;
+            -webkit-animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+            animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+            stroke-linecap: round;
+        }
+        
+        @-webkit-keyframes rotate {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+        
+        @keyframes rotate {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+        
+        @-webkit-keyframes dash {
+            0% {
+                stroke-dasharray: 1, 200;
+                stroke-dashoffset: 0;
+            }
+            50% {
+                stroke-dasharray: 89, 200;
+                stroke-dashoffset: -35px;
+            }
+            100% {
+                stroke-dasharray: 89, 200;
+                stroke-dashoffset: -124px;
+            }
+        }
+        
+        @keyframes dash {
+            0% {
+                stroke-dasharray: 1, 200;
+                stroke-dashoffset: 0;
+            }
+            50% {
+                stroke-dasharray: 89, 200;
+                stroke-dashoffset: -35px;
+            }
+            100% {
+                stroke-dasharray: 89, 200;
+                stroke-dashoffset: -124px;
+            }
+        }
+        
+        @-webkit-keyframes color {
+            100%,
+            0% {
+                stroke: #d62d20;
+            }
+            40% {
+                stroke: #0057e7;
+            }
+            66% {
+                stroke: #008744;
+            }
+            80%,
+            90% {
+                stroke: #ffa700;
+            }
+        }
+        
+        @keyframes color {
+            100%,
+            0% {
+                stroke: #d62d20;
+            }
+            40% {
+                stroke: #0057e7;
+            }
+            66% {
+                stroke: #008744;
+            }
+            80%,
+            90% {
+                stroke: #ffa700;
+            }
+        }
+        
+        .loading-dialog-container h2 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="fab done" onClick="download()">✓</div>
+
+    <div id="loading-dialog-container" class="loading-dialog-container hidden">
+        <div class="dialog"> <svg class="circular" viewBox="25 25 50 50"> <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/> </svg>
+            <h2>Making your module</h2>
+        </div>
+    </div>
+    <div class="toolbar">
+        <div class="toolbar-title">Crab Module Maker</div>
+    </div>
+    <div id="editor" class="editor">
+
+
+        <div id="questions" class="question-card">
+
+            <div class="question"> <input id="name" type="text" required/> <label>Module Name</label> </div>
+            <div class="question"> <input id="end" type="text" required/> <label>Module API Endpoint</label> </div>
+            <div class="question"> <textarea id="jss"></textarea> <label>Module Code</label> </div>
+        </div>
+        <div id="modcod" class="question-card" hidden>
+            <div class="question">Module code (Send pull request on Github. Modules will be added after evaluation.)</div>
+            <div id="code" class="question"></div>
+        </div>
+    </div>
+</body>
+
+<script>
+    function download() {
+        document.getElementById("modcod").hidden = false;
+        document.getElementById("code").innerHTML = "intents.matches('" + document.getElementById("name").value + "', [\n    function(session) {\n        " + document.getElementById("jss").value + "\nrequest('" + document.getElementById("end").value + "', function(error, response, body) {\n            if (!error && response.statusCode == 200) {\n                session.send(body);\n            }\n        })\n    }\n]);";
+    }
+</script>
+
+</html>

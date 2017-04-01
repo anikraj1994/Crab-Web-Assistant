@@ -82,6 +82,21 @@ intents.matches('ChangeName', [
     }
 ]);
 
+
+intents.matches('LocationSearch', [
+    function(session, args) {
+        request('https://maps.googleapis.com/maps/api/place/textsearch/xml?key=AIzaSyA08sPZr_DoNjC4JzV8vCj3csG0HZ3zUUM&query=' + args.query, function(error, response, body) {
+            if (!error && response.statusCode == 200) {
+                result = JSON.parse(body).results;
+                for (loc in result) {
+                    session.send("#^ " + loc.formatted_address);
+                }
+
+            }
+        })
+    }
+]);
+
 intents.matches(/^what is the time/i, [
     function(session) {
         console.log("match time1");
@@ -139,6 +154,15 @@ intents.matches('TellJoke', [
         })
     }
 ]);
+// intents.matches('TellJoke', [
+//     function(session) {
+//         request('', function(error, response, body) {
+//             if (!error && response.statusCode == 200) {
+//                 session.send(body);
+//             }
+//         })
+//     }
+// ]);
 
 
 intents.matches(/^sign out of uber/i, [
