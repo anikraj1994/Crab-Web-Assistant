@@ -96,8 +96,8 @@ intents.matches('LocationSearch', [
                     var loc = result[i];
                     //console.log(loc);
                     var rat = "";
-                    if (loc.rating) rat = "\nrating : " + loc.rating;
-                    session.send("#^ " + loc.name + rat + "\n" + loc.formatted_address);
+                    if (loc.rating) rat = "<br>rating : " + loc.rating;
+                    session.send("#^ " + loc.name + rat + "<br>" + loc.formatted_address);
                 }
 
             }
