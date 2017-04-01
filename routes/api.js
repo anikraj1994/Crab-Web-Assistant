@@ -89,6 +89,7 @@ intents.matches('LocationSearch', [
             if (!error && response.statusCode == 200) {
                 var result = JSON.parse(body).results;
                 for (var loc in result) {
+                    console.log(loc);
                     session.send("#^ " + loc.formatted_address);
                 }
 
