@@ -87,7 +87,7 @@ intents.matches('LocationSearch', [
     function(session, args) {
         request('https://maps.googleapis.com/maps/api/place/textsearch/json?key=AIzaSyA08sPZr_DoNjC4JzV8vCj3csG0HZ3zUUM&query=' + args.query, function(error, response, body) {
             if (!error && response.statusCode == 200) {
-                result = JSON.parse(body).results;
+                var result = JSON.parse(body).results;
                 for (loc in result) {
                     session.send("#^ " + loc.formatted_address);
                 }
